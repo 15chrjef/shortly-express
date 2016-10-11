@@ -2,6 +2,7 @@ var express = require('express');
 var util = require('./lib/utility');
 var partials = require('express-partials');
 var bodyParser = require('body-parser');
+var session = require('client-sessions');
 
 
 var db = require('./app/config');
@@ -12,6 +13,9 @@ var Link = require('./app/models/link');
 var Click = require('./app/models/click');
 
 var app = express();
+
+app.use(express.cookieParser());
+app.use(express.session({secret: '1234567890QWERTY'}));
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -72,6 +76,51 @@ function(req, res) {
   });
 });
 
+app.post('/login', 
+  function(req, res) {
+    new User({
+      username: req.body.username, 
+      password: req.body.password}).fetch().then(function(found) {
+        if ( found && (found.password !== req.body.password)) {
+          res.status(404);
+          res.setHeader('Location', '/');
+          res.send();
+          return;
+        }
+        if (!found) {
+          res.status(404);
+          res.setHeader('Location', '/login');
+          res.send();
+          return;
+        }
+        req.session.user = user;
+        app.use(session({
+          cookieName: 'session',
+          secret: 'keyboardCat',
+          activeDuration: 5 * 60 * 1000,
+        }));
+        res.status(200);
+        res.setHeader('Location', '/');
+        res.send();
+      });
+  });
+
+app.post('/signup',
+  function(req, res) {
+    Users.create({
+      username: req.body.username,
+      password: req.body.password,
+    }).then(function(newUser) {
+      app.use(session({
+        cookieName: 'session',
+        secret: 'keyboardCat',
+        activeDuration: 5 * 60 * 1000,
+      }));
+      res.status(200);
+      res.setHeader('Location', '/');
+      res.send();
+    });
+  });
 /************************************************************/
 // Write your authentication routes here
 /************************************************************/

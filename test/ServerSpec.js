@@ -62,13 +62,16 @@ describe('', function() {
   describe('Link creation:', function() {
 
     var requestWithSession = request.defaults({jar: true});
-
-    xbeforeEach(function(done) {
+    // console.log('here1');
+    beforeEach(function(done) {
+      // console.log('here2');
       // create a user that we can then log-in with
       new User({
         'username': 'Phillip',
-        'password': 'Phillip'
+        'password': 'Phillip'//,
+        // 'salt' : "test"
       }).save().then(function() {
+        // console.log('here3');
         var options = {
           'method': 'POST',
           'followAllRedirects': true,
@@ -213,7 +216,7 @@ describe('', function() {
 
   }); // 'Link creation'
 
-  xdescribe('Privileged Access:', function() {
+  describe('Privileged Access:', function() {
 
     it('Redirects to login page if a user tries to access the main page and is not signed in', function(done) {
       request('http://127.0.0.1:4568/', function(error, res, body) {
@@ -238,7 +241,7 @@ describe('', function() {
 
   }); // 'Priviledged Access'
 
-  xdescribe('Account Creation:', function() {
+  describe('Account Creation:', function() {
 
     it('Signup creates a user record', function(done) {
       var options = {
@@ -286,7 +289,7 @@ describe('', function() {
 
   }); // 'Account Creation'
 
-  xdescribe('Account Login:', function() {
+  describe('Account Login:', function() {
 
     var requestWithSession = request.defaults({jar: true});
 
