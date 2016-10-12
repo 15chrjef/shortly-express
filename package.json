@@ -21,12 +21,14 @@
     "bluebird": "^3.3.4",
     "body-parser": "^1.15.0",
     "bookshelf": "^0.9.1",
+    "client-sessions": "^0.7.0",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "express-partials": "^0.3.0",
     "express-session": "^1.13.0",
     "knex": "^0.10.0",
     "request": "^2.34.0",
+    "sessions": "0.0.2-7",
     "sqlite3": "~3.1.1"
   },
   "devDependencies": {
